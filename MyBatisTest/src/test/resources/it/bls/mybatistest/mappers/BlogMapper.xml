@@ -1,0 +1,34 @@
+<mapper namespace="com.sivalabs.mybatisdemo.mappers.BlogMapper">
+	<resultMap type="Blog" id="BlogResult">
+		<id property="blogId" column="BLOG_ID" />
+		<result property="blogName" column="BLOG_NAME" />
+		<result property="createdOn" column="CREATED_ON" />
+		<collection property="posts" ofType="Post" resultMap="PostResult"
+			columnPrefix="post_"></collection>
+	</resultMap>
+
+	<resultMap type="Post" id="PostResult">
+		<id property="postId" column="POST_ID" />
+		<result property="postTitle" column="POST_TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="createdOn" column="CREATED_ON" />
+	</resultMap>
+
+	<select id="getBlogById" parameterType="int" resultMap="BlogResult">
+		SELECT
+		b.blog_id, b.blog_name, b.created_on,
+		p.post_id as post_post_id, p.title as post_title, p.content as post_content,
+		p.created_on as post_created_on
+		FROM blog b left outer join post p on b.blog_id=p.blog_id
+		WHERE b.BLOG_ID=#{blogId}
+	</select>
+
+	<select id="getAllBlogs" resultMap="BlogResult">
+		SELECT
+		b.blog_id, b.blog_name, b.created_on as blog_created_on,
+		p.post_id as post_post_id, p.title as post_title, p.content as post_content,
+		p.created_on as post_created_on
+		FROM blog b left outer join post p on b.blog_id=p.blog_id
+	</select>
+
+</mapper>
