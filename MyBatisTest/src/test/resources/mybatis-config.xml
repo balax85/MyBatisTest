@@ -22,6 +22,6 @@
 	</environments>
 	<mappers>
 		<mapper resource="it/bls/mybatistest/mappers/UserMapper.xml" />
-		<mapper class="it/bls/mybatistest/mappers/BlogMapper" />
+		<mapper resource="it/bls/mybatistest/mappers/BlogMapper.xml" />
 	</mappers>
 </configuration>

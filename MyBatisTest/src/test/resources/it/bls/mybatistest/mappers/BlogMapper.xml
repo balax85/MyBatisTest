@@ -1,7 +1,10 @@
-<mapper namespace="com.sivalabs.mybatisdemo.mappers.BlogMapper">
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="it.bls.mybatistest.mappers.BlogMapper">
 	<resultMap type="Blog" id="BlogResult">
 		<id property="blogId" column="BLOG_ID" />
-		<result property="blogName" column="BLOG_NAME" />
+		<result property="blogTitle" column="BLOG_TITLE" />
 		<result property="createdOn" column="CREATED_ON" />
 		<collection property="posts" ofType="Post" resultMap="PostResult"
 			columnPrefix="post_"></collection>
@@ -16,19 +19,30 @@
 
 	<select id="getBlogById" parameterType="int" resultMap="BlogResult">
 		SELECT
-		b.blog_id, b.blog_name, b.created_on,
-		p.post_id as post_post_id, p.title as post_title, p.content as post_content,
-		p.created_on as post_created_on
+		b.BLOG_ID, b.BLOG_TITLE, b.CREATED_ON,
+		p.POST_ID as post_post_id, p.POST_TITLE as post_title, p.CONTENT as post_content,
+		p.CREATED_ON as post_created_on
 		FROM blog b left outer join post p on b.blog_id=p.blog_id
 		WHERE b.BLOG_ID=#{blogId}
 	</select>
 
 	<select id="getAllBlogs" resultMap="BlogResult">
 		SELECT
-		b.blog_id, b.blog_name, b.created_on as blog_created_on,
-		p.post_id as post_post_id, p.title as post_title, p.content as post_content,
-		p.created_on as post_created_on
+		b.BLOG_ID, b.BLOG_TITLE, b.CREATED_ON,
+		p.POST_ID as post_post_id, p.POST_TITLE as post_title, p.CONTENT as post_content,
+		p.CREATED_ON as post_created_on
 		FROM blog b left outer join post p on b.blog_id=p.blog_id
 	</select>
+	
+	<insert id="insertBlog" parameterType="Blog" useGeneratedKeys="true"
+		keyProperty="blogId">
+		INSERT INTO BLOG(BLOG_TITLE, CREATED_ON) VALUES(#{blogTitle}, #{createdOn})
+	</insert>
+	<update id="updateUser" parameterType="User">
+		UPDATE BLOG SET BLOG_TITLE=#{blogTitle}, CREATED_ON=#{createdOn} WHERE BLOG_ID=#{blogId}
+	</update>
+	<delete id="deleteUser" parameterType="int">
+		DELETE FROM BLOG WHERE BLOG_ID=#{blogId}
+	</delete>
 
 </mapper>

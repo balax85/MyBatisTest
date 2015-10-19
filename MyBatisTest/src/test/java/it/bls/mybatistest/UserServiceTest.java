@@ -23,6 +23,25 @@ public class UserServiceTest {
 	public static void teardown() {
 		userService = null;
 	}
+	
+	@Test
+	public void testInsertUser() {
+		for (int i = 0; i < 10; i++) {
+			User user = new User();
+			user.setEmail("test_email_" + System.currentTimeMillis() + "@gmail.com");
+			user.setPassword("secret");
+			user.setFirstName("TestFirstName");
+			user.setLastName("TestLastName");
+			userService.insertUser(user);
+			Assert.assertTrue(user.getUserId() != 0);
+			User createdUser = userService.getUserById(user.getUserId());
+			Assert.assertNotNull(createdUser);
+			Assert.assertEquals(user.getEmail(), createdUser.getEmail());
+			Assert.assertEquals(user.getPassword(), createdUser.getPassword());
+			Assert.assertEquals(user.getFirstName(), createdUser.getFirstName());
+			Assert.assertEquals(user.getLastName(), createdUser.getLastName());
+		}
+	}	
 
 	@Test
 	public void testGetUserById() {
@@ -53,23 +72,6 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testInsertUser() {
-		User user = new User();
-		user.setEmail("test_email_" + System.currentTimeMillis() + "@gmail.com");
-		user.setPassword("secret");
-		user.setFirstName("TestFirstName");
-		user.setLastName("TestLastName");
-		userService.insertUser(user);
-		Assert.assertTrue(user.getUserId() != 0);
-		User createdUser = userService.getUserById(user.getUserId());
-		Assert.assertNotNull(createdUser);
-		Assert.assertEquals(user.getEmail(), createdUser.getEmail());
-		Assert.assertEquals(user.getPassword(), createdUser.getPassword());
-		Assert.assertEquals(user.getFirstName(), createdUser.getFirstName());
-		Assert.assertEquals(user.getLastName(), createdUser.getLastName());
-	}
-
-	@Test
 	public void testUpdateUser() {
 		long timestamp = System.currentTimeMillis();
 		User user = userService.getUserById(2);
@@ -83,7 +85,7 @@ public class UserServiceTest {
 
 	@Test
 	public void testDeleteUser() {
-		User user = userService.getUserById(4);
+		User user = userService.getUserById(1);
 		userService.deleteUser(user.getUserId());
 		User deletedUser = userService.getUserById(4);
 		Assert.assertNull(deletedUser);
